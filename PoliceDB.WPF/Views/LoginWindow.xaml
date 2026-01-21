@@ -1,0 +1,102 @@
+﻿<Window
+    x:Class="PoliceDB.WPF.Views.LoginWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Полицейская база данных - Авторизация"
+    Width="400"
+    Height="500"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20">
+
+            <!--  Заголовок  -->
+            <TextBlock
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontSize="20"
+                FontWeight="Bold"
+                Text="Полицейская база данных" />
+
+            <!--  Логин  -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Margin="0,0,0,5" Text="Логин:" />
+                <TextBox Height="30" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!--  Пароль  -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Margin="0,0,0,5" Text="Пароль:" />
+                <PasswordBox
+                    x:Name="PasswordBox"
+                    Height="30"
+                    PasswordChanged="PasswordBox_PasswordChanged" />
+            </StackPanel>
+
+            <!--  Номер дела  -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Margin="0,0,0,5" Text="Номер дела:" />
+                <TextBox Height="30" Text="{Binding CaseId, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!--  Роль  -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Margin="0,0,0,5" Text="Роль:" />
+                <ComboBox
+                    x:Name="RoleComboBox"
+                    Height="30"
+                    SelectedItem="{Binding SelectedRole, Mode=TwoWay}"
+                    SelectionChanged="RoleComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Следователь" />
+                    <ComboBoxItem Content="Старший следователь" />
+                    <ComboBoxItem Content="Присяжный" />
+                    <ComboBoxItem Content="Адвокат/Прокурор" />
+                    <ComboBoxItem Content="Судья" />
+                    <ComboBoxItem Content="Администратор" />
+                </ComboBox>
+            </StackPanel>
+
+            <!--  Поле для номера участка  -->
+            <StackPanel
+                x:Name="DepartmentPanel"
+                Margin="0,0,0,20"
+                Orientation="Horizontal"
+                Visibility="{Binding SelectedRole}">
+                <TextBlock
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center"
+                    Text="№ участка:" />
+                <TextBox
+                    x:Name="DepartmentTextBox"
+                    Width="100"
+                    Height="30"
+                    Text="{Binding DepartmentNumber, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+
+            <!--  Кнопка входа  -->
+            <Button
+                x:Name="LoginButton"
+                Height="40"
+                Margin="0,10,0,0"
+                Background="#FF0078D7"
+                Command="{Binding LoginCommand}"
+                Content="Войти"
+                FontWeight="Bold"
+                Foreground="White" />
+
+            <!--  Сообщение об ошибке  -->
+            <TextBlock
+                x:Name="ErrorTextBlock"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center"
+                Foreground="Red"
+                Text="{Binding ErrorMessage}"
+                TextWrapping="Wrap"
+                Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </StackPanel>
+    </ScrollViewer>
+</Window>
