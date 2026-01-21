@@ -1,0 +1,15 @@
+E:\PoliceDatabase\PoliceDB.DAL\bin\Debug\net8.0\PoliceDB.DAL.deps.json
+E:\PoliceDatabase\PoliceDB.DAL\bin\Debug\net8.0\PoliceDB.DAL.dll
+E:\PoliceDatabase\PoliceDB.DAL\bin\Debug\net8.0\PoliceDB.DAL.pdb
+E:\PoliceDatabase\PoliceDB.DAL\bin\Debug\net8.0\PoliceDB.Core.dll
+E:\PoliceDatabase\PoliceDB.DAL\bin\Debug\net8.0\PoliceDB.Core.pdb
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.csproj.AssemblyReference.cache
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.GeneratedMSBuildEditorConfig.editorconfig
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.AssemblyInfoInputs.cache
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.AssemblyInfo.cs
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.csproj.CoreCompileInputs.cache
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.4AB8D79E.Up2Date
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.dll
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\refint\PoliceDB.DAL.dll
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\PoliceDB.DAL.pdb
+E:\PoliceDatabase\PoliceDB.DAL\obj\Debug\net8.0\ref\PoliceDB.DAL.dll
