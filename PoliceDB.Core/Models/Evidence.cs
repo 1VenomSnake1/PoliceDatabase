@@ -11,6 +11,7 @@ namespace PoliceDB.Core.Models
         Biological,  // Биологическое
         Other        // Иное
     }
+    
 
     public class Evidence
     {
@@ -18,6 +19,7 @@ namespace PoliceDB.Core.Models
         public string Code { get; set; } = string.Empty; // Уникальный код улики
         public string CaseId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
+        public string? PhotoPath { get; set; }
         public EvidenceType Type { get; set; }
         public Dictionary<string, string> Parameters { get; set; } = new();
         public string Description { get; set; } = string.Empty;
@@ -25,4 +27,6 @@ namespace PoliceDB.Core.Models
         public string AddedByUserId { get; set; } = string.Empty;
         public DateTime AddedDate { get; set; } = DateTime.UtcNow;
     }
+
+
 }
