@@ -33,7 +33,7 @@ namespace PoliceDB.BLL.Services
                 Username = "judge",
                 PasswordHash = "judge123",
                 Role = UserRole.Judge,
-                AllowedCaseIds = new List<string> { "CASE-001", "CASE-002", "CASE-003" }
+                AllowedCaseIds = new List<string> { "CASE-001", "CASE-002", "CASE-003", "CASE-004" }
             },
             new User
             {
