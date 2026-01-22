@@ -1,4 +1,5 @@
 ﻿using PoliceDB.WPF.Views;
+using PoliceDB.WPF.ViewModels;
 using System.Windows;
 
 namespace PoliceDB.WPF

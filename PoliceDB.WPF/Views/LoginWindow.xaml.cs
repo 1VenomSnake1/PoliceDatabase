@@ -8,63 +8,55 @@ namespace PoliceDB.WPF.Views
 {
     public partial class LoginWindow : Window
     {
-        private readonly LoginViewModel _viewModel;
+        private readonly LoginViewModel _loginViewModel;
 
         public LoginWindow()
         {
             InitializeComponent();
 
-            _viewModel = new LoginViewModel(new MockAuthService());
-            DataContext = _viewModel;
+            // Создаем ViewModel с Mock сервисом
+            _loginViewModel = new LoginViewModel(new MockAuthService());
+            DataContext = _loginViewModel;
 
-            _viewModel.LoginSuccessful += OnLoginSuccessful;
-
-            UpdateUIForRole("Следователь");
+            // Подписываемся на события
+            _loginViewModel.LoginSuccessful += OnLoginSuccessful;
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.Password = ((PasswordBox)sender).Password;
+            if (_loginViewModel != null)
+            {
+                _loginViewModel.Password = ((PasswordBox)sender).Password;
+            }
         }
 
         private void RoleComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (RoleComboBox.SelectedItem is ComboBoxItem selectedItem)
+            // Обновляем состояние кнопки
+            if (_loginViewModel != null)
             {
-                var role = selectedItem.Content.ToString();
-                UpdateUIForRole(role);
-
-                _viewModel.LoginCommand.NotifyCanExecuteChanged();
+                _loginViewModel.LoginCommand.NotifyCanExecuteChanged();
             }
-        }
-
-        private void UpdateUIForRole(string role)
-        {
-            Console.WriteLine($"UpdateUIForRole called with role: {role}");
-
-            if (role == "Следователь" || role == "Старший следователь")
-            {
-                Console.WriteLine("Showing DepartmentPanel");
-                DepartmentPanel.Visibility = Visibility.Visible;
-                DepartmentTextBox.IsEnabled = true;
-            }
-            else
-            {
-                Console.WriteLine("Hiding DepartmentPanel");
-                DepartmentPanel.Visibility = Visibility.Collapsed;
-                DepartmentTextBox.Clear();
-                DepartmentTextBox.IsEnabled = false;
-            }
-
-            // Принудительно обновляем layout
-            DepartmentPanel.UpdateLayout();
         }
 
         private void OnLoginSuccessful(object? sender, PoliceDB.Core.Models.User user)
         {
-            var mainWindow = new MainWindow();
+            // Получаем caseId из ViewModel
+            string caseId = _loginViewModel.CaseId;
+
+            // Создаем главное окно с данными пользователя и дела
+            var mainWindow = new MainWindow(user, caseId);
             mainWindow.Show();
             this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            if (_loginViewModel != null)
+            {
+                _loginViewModel.LoginSuccessful -= OnLoginSuccessful;
+            }
         }
     }
 }

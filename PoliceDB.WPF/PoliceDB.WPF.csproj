@@ -6,6 +6,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <Page Remove="Styles\MainWindowStyles.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Styles\MainWindowStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\PoliceDB.BLL\PoliceDB.BLL.csproj" />
     <ProjectReference Include="..\PoliceDB.Core\PoliceDB.Core.csproj" />
   </ItemGroup>
