@@ -1,4 +1,6 @@
-﻿using PoliceDB.BLL.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using PoliceDB.BLL.Interfaces;
+using PoliceDB.Core.Models;
 using PoliceDB.WPF.ViewModels;
 using System;
 using System.Windows;
@@ -10,12 +12,12 @@ namespace PoliceDB.WPF.Views
     {
         private readonly LoginViewModel _loginViewModel;
 
-        public LoginWindow()
+        // Конструктор с параметрами (как было изначально)
+        public LoginWindow(IAuthService authService, LoginViewModel loginViewModel)
         {
             InitializeComponent();
 
-            // Создаем ViewModel с Mock сервисом
-            _loginViewModel = new LoginViewModel(new MockAuthService());
+            _loginViewModel = loginViewModel;
             DataContext = _loginViewModel;
 
             // Подписываемся на события
@@ -44,8 +46,14 @@ namespace PoliceDB.WPF.Views
             // Получаем caseId из ViewModel
             string caseId = _loginViewModel.CaseId;
 
-            // Создаем главное окно с данными пользователя и дела
-            var mainWindow = new MainWindow(user, caseId);
+            // Получаем MainViewModel через DI
+            var mainViewModel = App.ServiceProvider.GetRequiredService<MainViewModel>();
+
+            // Устанавливаем данные пользователя и дела
+            mainViewModel.SetUserData(user, caseId);
+
+            // Создаем главное окно с ViewModel
+            var mainWindow = new MainWindow(mainViewModel);
             mainWindow.Show();
             this.Close();
         }

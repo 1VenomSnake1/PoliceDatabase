@@ -1,10 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PoliceDB.Core.Models;
+using PoliceDB.WPF.ViewModels;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using MenuItemModel = PoliceDB.WPF.Models.MenuItem;
 using PoliceDB.WPF.Views;
 
@@ -12,8 +13,8 @@ namespace PoliceDB.WPF.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
-        private readonly User _currentUser;
-        private readonly string _caseId;
+        private User _currentUser;
+        private string _caseId;
 
         [ObservableProperty]
         private string _caseInfo = string.Empty;
@@ -24,11 +25,20 @@ namespace PoliceDB.WPF.ViewModels
         [ObservableProperty]
         private ObservableCollection<PoliceDB.WPF.Models.MenuItem> _menuItems = new();
 
+        // Конструктор с 2 параметрами
         public MainViewModel(User user, string caseId)
         {
             _currentUser = user;
             _caseId = caseId;
+            InitializeUserInfo();
+            InitializeMenuItems();
+        }
 
+        // Метод для установки данных (если нужно изменить)
+        public void SetUserData(User user, string caseId)
+        {
+            _currentUser = user;
+            _caseId = caseId;
             InitializeUserInfo();
             InitializeMenuItems();
         }
@@ -66,7 +76,7 @@ namespace PoliceDB.WPF.ViewModels
                 {
                     Title = "Добавить улику",
                     Description = "Добавить новую улику в дело",
-                    Icon = "🔍", // Лупа
+                    Icon = "🔍",
                     AllowedRoles = new[] { UserRole.Investigator, UserRole.Administrator },
                     Command = new RelayCommand(ShowAddEvidenceWindow)
                 },
@@ -76,7 +86,7 @@ namespace PoliceDB.WPF.ViewModels
                 {
                     Title = "Изменить улику",
                     Description = "Внести изменения в существующую улику",
-                    Icon = "✏️", // Карандаш
+                    Icon = "✏️",
                     AllowedRoles = new[] { UserRole.SeniorInvestigator, UserRole.LawyerProsecutor, UserRole.Administrator },
                     Command = new RelayCommand(ShowModifyEvidenceWindow)
                 },
@@ -86,7 +96,7 @@ namespace PoliceDB.WPF.ViewModels
                 {
                     Title = "Просмотр улик",
                     Description = "Просмотр всех улик по делу",
-                    Icon = "📋", // Список
+                    Icon = "📋",
                     AllowedRoles = new[] {
                         UserRole.Investigator,
                         UserRole.SeniorInvestigator,
@@ -102,7 +112,7 @@ namespace PoliceDB.WPF.ViewModels
                 {
                     Title = "Описание дела",
                     Description = "Просмотр и редактирование описания дела",
-                    Icon = "📁", // Папка
+                    Icon = "📁",
                     AllowedRoles = new[] {
                         UserRole.Investigator,
                         UserRole.SeniorInvestigator,
@@ -119,7 +129,7 @@ namespace PoliceDB.WPF.ViewModels
                 {
                     Title = "Вынести приговор",
                     Description = "Вынесение окончательного приговора по делу",
-                    Icon = "⚖️", // Весы правосудия
+                    Icon = "⚖️",
                     AllowedRoles = new[] { UserRole.Judge },
                     Command = new RelayCommand(ShowVerdictWindow)
                 }
@@ -141,7 +151,7 @@ namespace PoliceDB.WPF.ViewModels
         // Методы для открытия окон
         private void ShowAddEvidenceWindow()
         {
-            var addEvidenceWindow = new AddEvidenceWindow(_caseId, _currentUser);
+            var addEvidenceWindow = new AddEvidenceWindow(_caseId, _currentUser); // 2 параметра
             addEvidenceWindow.Owner = Application.Current.MainWindow;
             addEvidenceWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             addEvidenceWindow.ShowDialog();
@@ -149,7 +159,7 @@ namespace PoliceDB.WPF.ViewModels
 
         private void ShowModifyEvidenceWindow()
         {
-            var modifyEvidenceWindow = new ModifyEvidenceWindow(_caseId, _currentUser);
+            var modifyEvidenceWindow = new ModifyEvidenceWindow(_caseId, _currentUser); // 2 параметра
             modifyEvidenceWindow.Owner = Application.Current.MainWindow;
             modifyEvidenceWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             modifyEvidenceWindow.ShowDialog();
@@ -157,7 +167,7 @@ namespace PoliceDB.WPF.ViewModels
 
         private void ShowViewEvidenceWindow()
         {
-            var evidenceListWindow = new EvidenceListWindow(_caseId, _currentUser);
+            var evidenceListWindow = new EvidenceListWindow(_caseId, _currentUser); // 2 параметра
             evidenceListWindow.Owner = Application.Current.MainWindow;
             evidenceListWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             evidenceListWindow.ShowDialog();
@@ -165,7 +175,7 @@ namespace PoliceDB.WPF.ViewModels
 
         private void ShowCaseDetailsWindow()
         {
-            var caseDetailsWindow = new CaseDetailsWindow(_caseId, _currentUser);
+            var caseDetailsWindow = new CaseDetailsWindow(_caseId, _currentUser); // 2 параметра
             caseDetailsWindow.Owner = Application.Current.MainWindow;
             caseDetailsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             caseDetailsWindow.ShowDialog();
@@ -173,7 +183,7 @@ namespace PoliceDB.WPF.ViewModels
 
         private void ShowVerdictWindow()
         {
-            var verdictWindow = new VerdictWindow(_caseId, _currentUser);
+            var verdictWindow = new VerdictWindow(_caseId, _currentUser); // 2 параметра
             verdictWindow.Owner = Application.Current.MainWindow;
             verdictWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             verdictWindow.ShowDialog();

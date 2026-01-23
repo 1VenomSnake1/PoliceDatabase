@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using PoliceDB.BLL.Interfaces;
 using PoliceDB.Core.Models;
 using PoliceDB.WPF.Models;
 using System;
@@ -8,13 +9,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace PoliceDB.WPF.ViewModels
 {
     public partial class AddEvidenceViewModel : ObservableObject
     {
+        private readonly IEvidenceService _evidenceService;
         private readonly string _caseId;
         private readonly User _currentUser;
         private readonly Window _window;
@@ -60,11 +61,12 @@ namespace PoliceDB.WPF.ViewModels
 
         public Array EvidenceTypes => Enum.GetValues(typeof(EvidenceType));
 
-        public AddEvidenceViewModel(Window window, string caseId, User currentUser)
+        public AddEvidenceViewModel(Window window, string caseId, User currentUser, IEvidenceService evidenceService)
         {
             _window = window;
             _caseId = caseId;
             _currentUser = currentUser;
+            _evidenceService = evidenceService;
 
             AddParameterCommand = new RelayCommand(AddParameter, CanAddParameter);
             RemoveParameterCommand = new RelayCommand<DynamicParameter>(RemoveParameter);
@@ -72,6 +74,8 @@ namespace PoliceDB.WPF.ViewModels
             SaveEvidenceCommand = new RelayCommand(SaveEvidence, CanSaveEvidence);
             CancelCommand = new RelayCommand(Cancel);
         }
+
+        // Нужно добавить эти методы:
 
         private bool CanAddParameter()
         {
@@ -90,7 +94,6 @@ namespace PoliceDB.WPF.ViewModels
                 NewParameterName = string.Empty;
                 NewParameterValue = string.Empty;
 
-                // Проверяем, нужно ли показывать скроллбар
                 UpdateScrollBarVisibility();
             }
         }
@@ -117,8 +120,6 @@ namespace PoliceDB.WPF.ViewModels
                 try
                 {
                     PhotoFilePath = openFileDialog.FileName;
-
-                    // Просто показываем имя файла, без загрузки изображения
                     PhotoPath = System.IO.Path.GetFileName(PhotoFilePath);
                 }
                 catch (Exception ex)
@@ -136,7 +137,6 @@ namespace PoliceDB.WPF.ViewModels
             // Проверяем обязательные поля
             bool hasName = !string.IsNullOrWhiteSpace(EvidenceName);
 
-            // Для отладки
             System.Diagnostics.Debug.WriteLine($"=== CanSaveEvidence ===");
             System.Diagnostics.Debug.WriteLine($"EvidenceName: '{EvidenceName}'");
             System.Diagnostics.Debug.WriteLine($"IsNullOrWhiteSpace: {string.IsNullOrWhiteSpace(EvidenceName)}");
@@ -181,11 +181,20 @@ namespace PoliceDB.WPF.ViewModels
                 }
                 evidence.Parameters = parametersDict;
 
-                // TODO: Здесь будет вызов сервиса для сохранения в базу данных
-                MessageBox.Show($"Улика '{EvidenceName}' успешно добавлена!\nКод: {evidence.Code}",
-                    "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Используем реальный сервис для сохранения
+                var result = _evidenceService.AddEvidence(evidence, _currentUser.Id);
 
-                _window.Close();
+                if (result != null)
+                {
+                    MessageBox.Show($"Улика '{EvidenceName}' успешно добавлена!\nКод: {evidence.Code}",
+                        "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _window.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка при сохранении улики в базу данных",
+                        "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             catch (Exception ex)
             {

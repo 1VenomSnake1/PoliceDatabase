@@ -14,7 +14,7 @@ namespace PoliceDB.WPF.ViewModels
 {
     public partial class EvidenceListViewModel : ObservableObject
     {
-        private readonly IEvidenceService _evidenceService;
+        private readonly IEvidenceService _evidenceService; // Добавлено поле
         private readonly string _caseId;
         private readonly User _currentUser;
         private readonly Window _window;
@@ -34,15 +34,12 @@ namespace PoliceDB.WPF.ViewModels
         public IRelayCommand BackCommand { get; }
         public IRelayCommand RefreshCommand { get; }
 
-        public EvidenceListViewModel(Window window, string caseId, User currentUser)
+        public EvidenceListViewModel(Window window, string caseId, User currentUser, IEvidenceService evidenceService) // Добавлен параметр
         {
             _window = window;
             _caseId = caseId;
             _currentUser = currentUser;
-
-            // Используем MockEvidenceService для демонстрации
-            // В реальном приложении нужно внедрять через DI
-            _evidenceService = new PoliceDB.BLL.Services.MockEvidenceService();
+            _evidenceService = evidenceService; // Инициализация поля
 
             BackCommand = new RelayCommand(Back);
             RefreshCommand = new RelayCommand(RefreshEvidences);

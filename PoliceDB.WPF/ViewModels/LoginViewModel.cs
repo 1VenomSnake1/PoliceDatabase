@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MongoDB.Driver;
 using PoliceDB.BLL.Interfaces;
 using PoliceDB.Core.Models;
 using System;
@@ -45,7 +46,10 @@ namespace PoliceDB.WPF.ViewModels
         {
             _authService = authService;
             LoginCommand = new RelayCommand(ExecuteLogin, CanExecuteLogin);
+
         }
+
+        
 
         private bool CanExecuteLogin()
         {
@@ -92,7 +96,7 @@ namespace PoliceDB.WPF.ViewModels
                     _ => throw new ArgumentException("Неизвестная роль")
                 };
 
-                // Вызываем сервис аутентификации
+                // Вызываем реальный сервис аутентификации
                 var user = _authService.Login(Username, Password, CaseId, role, DepartmentNumber);
 
                 if (user != null)

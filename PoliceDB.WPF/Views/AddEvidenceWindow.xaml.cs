@@ -1,4 +1,5 @@
-﻿using PoliceDB.Core.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using PoliceDB.Core.Models;
 using PoliceDB.WPF.ViewModels;
 using System.Windows;
 
@@ -6,10 +7,14 @@ namespace PoliceDB.WPF.Views
 {
     public partial class AddEvidenceWindow : Window
     {
-        public AddEvidenceWindow(string caseId, User currentUser)
+        public AddEvidenceWindow(string caseId, User currentUser) // 2 параметра
         {
             InitializeComponent();
-            DataContext = new AddEvidenceViewModel(this, caseId, currentUser);
+
+            // Получаем сервисы через App.ServiceProvider
+            var evidenceService = App.ServiceProvider.GetRequiredService<PoliceDB.BLL.Interfaces.IEvidenceService>();
+
+            DataContext = new AddEvidenceViewModel(this, caseId, currentUser, evidenceService);
         }
     }
 }

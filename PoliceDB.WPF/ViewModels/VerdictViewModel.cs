@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PoliceDB.BLL.Interfaces;
-using PoliceDB.BLL.Services;
 using PoliceDB.Core.Models;
 using System;
 using System.Windows;
@@ -64,14 +63,12 @@ namespace PoliceDB.WPF.ViewModels
         public IRelayCommand NotGuiltyCommand { get; }
         public IRelayCommand BackCommand { get; }
 
-        public VerdictViewModel(Window window, string caseId, User currentUser)
+        public VerdictViewModel(Window window, string caseId, User currentUser, ICaseService caseService)
         {
             _window = window;
             _caseId = caseId;
             _currentUser = currentUser;
-
-            // Используем Mock сервис
-            _caseService = new MockCaseService();
+            _caseService = caseService; // Получаем через параметр
 
             GuiltyCommand = new RelayCommand(GiveGuiltyVerdict, CanGiveVerdict);
             NotGuiltyCommand = new RelayCommand(GiveNotGuiltyVerdict, CanGiveVerdict);
@@ -84,7 +81,7 @@ namespace PoliceDB.WPF.ViewModels
         {
             try
             {
-                // Загружаем дело
+                // Загружаем дело через реальный сервис
                 _currentCase = _caseService.GetCase(_caseId);
                 if (_currentCase == null)
                 {

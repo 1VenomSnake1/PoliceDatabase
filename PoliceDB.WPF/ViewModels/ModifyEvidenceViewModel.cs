@@ -8,7 +8,6 @@ using PoliceDB.WPF.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Policy;
 using System.Windows;
 
 namespace PoliceDB.WPF.ViewModels
@@ -76,11 +75,14 @@ namespace PoliceDB.WPF.ViewModels
 
         public Array EvidenceTypes => Enum.GetValues(typeof(EvidenceType));
 
-        public ModifyEvidenceViewModel(Window window, string caseId, User currentUser)
+        public ModifyEvidenceViewModel(Window window, string caseId, User currentUser,
+            IEvidenceService evidenceService, IPendingChangeRepository pendingChangeRepository)
         {
             _window = window;
             _caseId = caseId;
             _currentUser = currentUser;
+            _evidenceService = evidenceService;
+            _pendingChangeRepository = pendingChangeRepository;
 
             // Инициализируем сервисы
             // В реальном приложении они должны внедряться через DI

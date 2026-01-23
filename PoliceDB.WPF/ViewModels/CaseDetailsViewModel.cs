@@ -48,11 +48,12 @@ namespace PoliceDB.WPF.ViewModels
         public IRelayCommand CancelEditCommand { get; }
         public IRelayCommand BackCommand { get; }
 
-        public CaseDetailsViewModel(Window window, string caseId, User currentUser)
+        public CaseDetailsViewModel(Window window, string caseId, User currentUser, ICaseService caseService)
         {
             _window = window;
             _caseId = caseId;
             _currentUser = currentUser;
+            _caseService = caseService;
 
             // Инициализируем сервис
             _caseService = new PoliceDB.BLL.Services.MockCaseService();
