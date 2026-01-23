@@ -1,0 +1,287 @@
+﻿<Window
+    x:Class="PoliceDB.WPF.Views.VerdictWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Вынесение приговора"
+    Width="600"
+    Height="500"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+	<Window.Resources>
+		<!-- Конвертеры -->
+		<BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+	</Window.Resources>
+
+	<Grid Margin="20">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<!-- Заголовок -->
+		<Border
+            Grid.Row="0"
+            Padding="15"
+            Background="#FF0078D7"
+            CornerRadius="5">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+
+				<!-- Кнопка назад -->
+				<Button
+                    Grid.Column="0"
+                    Width="80"
+                    Height="30"
+                    Background="White"
+                    Command="{Binding BackCommand}"
+                    Content="← Назад"
+                    Cursor="Hand"
+                    FontWeight="Bold"
+                    Foreground="#FF0078D7" />
+
+				<!-- Заголовок окна -->
+				<TextBlock
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Вынесение приговора" />
+			</Grid>
+		</Border>
+
+		<!-- Основное содержимое -->
+		<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+			<Grid Margin="0,20,0,0">
+				<!-- Режим просмотра (если дело уже закрыто) -->
+				<Border
+                    Padding="20"
+                    Background="White"
+                    BorderBrush="#DDDDDD"
+                    BorderThickness="1"
+                    CornerRadius="5"
+                    Visibility="{Binding IsClosed, Converter={StaticResource BoolToVisibilityConverter}}">
+					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Foreground="{Binding StatusColor}"
+                            Text="{Binding StatusText}"
+                            TextAlignment="Center" />
+
+						<TextBlock
+                            Margin="0,20,0,0"
+                            FontSize="18"
+                            Text="{Binding VerdictText}"
+                            TextAlignment="Center" />
+
+						<TextBlock
+                            Margin="0,10,0,0"
+                            FontSize="14"
+                            FontStyle="Italic"
+                            Foreground="#666666"
+                            Text="{Binding VerdictDateText}"
+                            TextAlignment="Center" />
+
+						<TextBlock
+                            Margin="0,20,0,0"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Foreground="#666666"
+                            Text="Дело закрыто. Статус больше не может быть изменен."
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- Режим вынесения приговора (если дело не закрыто) -->
+				<Border
+                    Padding="20"
+                    Background="White"
+                    BorderBrush="#DDDDDD"
+                    BorderThickness="1"
+                    CornerRadius="5">
+					<Border.Style>
+						<Style TargetType="Border">
+							<Setter Property="Visibility" Value="Visible" />
+							<Style.Triggers>
+								<DataTrigger Binding="{Binding IsClosed}" Value="True">
+									<Setter Property="Visibility" Value="Collapsed" />
+								</DataTrigger>
+							</Style.Triggers>
+						</Style>
+					</Border.Style>
+
+					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+						<!-- Информация о деле -->
+						<StackPanel Margin="0,0,0,30" HorizontalAlignment="Center">
+							<TextBlock
+                                FontSize="18"
+                                FontWeight="Bold"
+                                Text="{Binding CaseTitle}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+
+							<TextBlock
+                                Margin="0,10,0,0"
+                                FontSize="14"
+                                Foreground="#666666"
+                                Text="{Binding CaseIdText}"
+                                TextAlignment="Center" />
+						</StackPanel>
+
+						<!-- Текущий статус -->
+						<Border
+                            Padding="10"
+                            Background="{Binding CurrentStatusColor}"
+                            CornerRadius="5"
+                            Margin="0,0,0,30">
+							<TextBlock
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="{Binding CurrentStatusText}"
+                                TextAlignment="Center" />
+						</Border>
+
+						<!-- Инструкция -->
+						<TextBlock
+                            Margin="0,0,0,30"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Text="Выберите вердикт:"
+                            TextAlignment="Center" />
+
+						<!-- Кнопки вердикта -->
+						<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+							<!-- Кнопка "ВИНОВЕН" -->
+							<Button
+                                Width="200"
+                                Height="100"
+                                Margin="10"
+                                Background="#F44336"
+                                Command="{Binding GuiltyCommand}"
+                                Content="ВИНОВЕН"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Cursor="Hand">
+								<Button.ToolTip>
+									<TextBlock>
+										<Run Text="Признать подсудимого виновным" />
+										<LineBreak />
+										<Run Text="Дело будет закрыто с вердиктом 'ВИНОВЕН'" />
+									</TextBlock>
+								</Button.ToolTip>
+							</Button>
+
+							<!-- Кнопка "НЕ ВИНОВЕН" -->
+							<Button
+                                Width="200"
+                                Height="100"
+                                Margin="10"
+                                Background="#4CAF50"
+                                Command="{Binding NotGuiltyCommand}"
+                                Content="НЕ ВИНОВЕН"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Cursor="Hand">
+								<Button.ToolTip>
+									<TextBlock>
+										<Run Text="Признать подсудимого невиновным" />
+										<LineBreak />
+										<Run Text="Дело будет закрыто с вердиктом 'НЕ ВИНОВЕН'" />
+									</TextBlock>
+								</Button.ToolTip>
+							</Button>
+						</StackPanel>
+
+						<!-- Предупреждение -->
+						<Border
+                            Margin="0,30,0,0"
+                            Padding="15"
+                            Background="#FFF3CD"
+                            BorderBrush="#FFEEBA"
+                            BorderThickness="1"
+                            CornerRadius="5">
+							<StackPanel>
+								<TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Foreground="#856404"
+                                    Text="⚠ ВНИМАНИЕ!"
+                                    TextAlignment="Center" />
+
+								<TextBlock
+                                    Margin="0,5,0,0"
+                                    FontSize="12"
+                                    Foreground="#856404"
+                                    Text="После вынесения приговора дело будет закрыто"
+                                    TextAlignment="Center" />
+
+								<TextBlock
+                                    FontSize="12"
+                                    Foreground="#856404"
+                                    Text="и его статус больше не может быть изменен!"
+                                    TextAlignment="Center" />
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Border>
+			</Grid>
+		</ScrollViewer>
+
+		<!-- Статистика -->
+		<Border
+            Grid.Row="2"
+            Margin="0,20,0,0"
+            Padding="10"
+            Background="#F5F5F5"
+            CornerRadius="5">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<!-- Информация о пользователе -->
+				<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+					<TextBlock
+                        FontSize="12"
+                        Foreground="#666666"
+                        Text="Судья: " />
+					<TextBlock
+                        FontSize="12"
+                        Foreground="#666666"
+                        Text="{Binding JudgeName}" />
+					<TextBlock
+                        Margin="10,0,0,0"
+                        FontSize="12"
+                        Foreground="#666666"
+                        Text="Дело создано: " />
+					<TextBlock
+                        FontSize="12"
+                        Foreground="#666666"
+                        Text="{Binding FormattedCaseCreatedDate}" />
+				</StackPanel>
+
+				<!-- Количество протоколов -->
+				<TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Foreground="#666666"
+                    Text="{Binding ProtocolsCountText}" />
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

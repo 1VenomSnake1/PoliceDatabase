@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="PoliceDB.BLL/PoliceDB.BLL.csproj" />
+  <Project Path="PoliceDB.Core/PoliceDB.Core.csproj" />
+  <Project Path="PoliceDB.DAL/PoliceDB.DAL.csproj" />
+  <Project Path="PoliceDB.Initializer/PoliceDB.Initializer.csproj" Id="2b882e47-89a0-4d33-b8c7-f8f176938c28" />
+  <Project Path="PoliceDB.WPF/PoliceDB.WPF.csproj" />
+</Solution>

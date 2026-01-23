@@ -1,0 +1,340 @@
+﻿<Window
+    x:Class="PoliceDB.WPF.Views.CaseDetailsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Описание дела"
+    Width="900"
+    Height="700"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <!--  Стиль для статуса  -->
+        <Style x:Key="StatusBadgeStyle" TargetType="Border">
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Шапка  -->
+        <Border
+            Grid.Row="0"
+            Padding="10"
+            Background="#FF0078D7"
+            CornerRadius="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Кнопка назад  -->
+                <Button
+                    Grid.Column="0"
+                    Width="80"
+                    Height="30"
+                    Background="White"
+                    Command="{Binding BackCommand}"
+                    Content="← Назад"
+                    Cursor="Hand"
+                    FontWeight="Bold"
+                    Foreground="#FF0078D7" />
+
+                <!--  Заголовок  -->
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Описание дела" />
+                    <TextBlock
+                        Margin="0,5,0,0"
+                        FontSize="14"
+                        Foreground="White"
+                        Text="{Binding CaseTitle}" />
+                </StackPanel>
+
+                <!--  Статус дела  -->
+                <Border
+                    Grid.Column="2"
+                    Background="{Binding StatusColor}"
+                    Style="{StaticResource StatusBadgeStyle}">
+                    <TextBlock
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding StatusText}" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <!--  Основное содержимое  -->
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="0,15,0,0"
+            VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <!--  Режим просмотра  -->
+                <Border
+                    Padding="20"
+                    Background="White"
+                    BorderBrush="#DDDDDD"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsViewMode}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Заголовок в режиме просмотра  -->
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Text="Описание дела" />
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                FontSize="12"
+                                FontStyle="Italic"
+                                Foreground="#666666"
+                                Text="Только для просмотра" />
+                        </StackPanel>
+
+                        <!--  Текст описания  -->
+                        <Border
+                            Grid.Row="1"
+                            Padding="15"
+                            Background="#F9F9F9"
+                            BorderBrush="#EEEEEE"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <TextBlock
+                                    FontSize="14"
+                                    Text="{Binding CaseDescription}"
+                                    TextWrapping="Wrap" />
+                            </ScrollViewer>
+                        </Border>
+
+                        <!--  Сообщение, если описание пустое  -->
+                        <Border
+                            Grid.Row="1"
+                            Padding="20"
+                            Background="#F5F5F5"
+                            BorderBrush="#DDDDDD"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CaseDescription}" Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CaseDescription}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Foreground="#666666"
+                                    Text="Описание отсутствует"
+                                    TextAlignment="Center" />
+                                <TextBlock
+                                    Margin="0,10,0,0"
+                                    Foreground="#666666"
+                                    Text="Для этого дела ещё не добавлено описание"
+                                    TextAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!--  Режим редактирования  -->
+                <Border
+                    Padding="20"
+                    Background="White"
+                    BorderBrush="#DDDDDD"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Заголовок в режиме редактирования  -->
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Text="Редактирование описания дела" />
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                FontSize="12"
+                                FontStyle="Italic"
+                                Foreground="#666666"
+                                Text="Используйте форматирование по своему усмотрению" />
+                        </StackPanel>
+
+                        <!--  Текстовое поле для редактирования  -->
+                        <Border
+                            Grid.Row="1"
+                            Background="#F9F9F9"
+                            BorderBrush="#EEEEEE"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <TextBox
+                                x:Name="DescriptionTextBox"
+                                Padding="15"
+                                AcceptsReturn="True"
+                                AcceptsTab="True"
+                                BorderThickness="0"
+                                FontSize="14"
+                                Text="{Binding CaseDescription, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="Wrap"
+                                VerticalScrollBarVisibility="Auto" />
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+
+        <!--  Нижняя панель  -->
+        <Border
+            Grid.Row="2"
+            Margin="0,15,0,0"
+            Padding="10"
+            Background="#F5F5F5"
+            CornerRadius="5">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Информация  -->
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="#666666"
+                        Text="{Binding CaseId, StringFormat='Номер дела: {0}'}" />
+                    <TextBlock
+                        Margin="0,5,0,0"
+                        FontSize="10"
+                        FontStyle="Italic"
+                        Foreground="#666666"
+                        Text="Описание форматируется пользователем" />
+                </StackPanel>
+
+                <!--  Кнопки  -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <!--  Кнопка редактирования (только в режиме просмотра и если можно редактировать)  -->
+                    <Button
+                        Width="120"
+                        Height="35"
+                        Margin="0,0,10,0"
+                        Background="#2196F3"
+                        Command="{Binding EditDescriptionCommand}"
+                        Content="Изменить"
+                        Cursor="Hand"
+                        FontWeight="Bold"
+                        Foreground="White">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CanEditDescription}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--  Кнопка отмены (только в режиме редактирования)  -->
+                    <Button
+                        Width="120"
+                        Height="35"
+                        Margin="0,0,10,0"
+                        Background="#9E9E9E"
+                        Command="{Binding CancelEditCommand}"
+                        Content="Отмена"
+                        Cursor="Hand"
+                        FontWeight="Bold"
+                        Foreground="White">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!--  Кнопка сохранения (только в режиме редактирования)  -->
+                    <Button
+                        Width="120"
+                        Height="35"
+                        Background="#4CAF50"
+                        Command="{Binding SaveDescriptionCommand}"
+                        Content="Сохранить"
+                        Cursor="Hand"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="White">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

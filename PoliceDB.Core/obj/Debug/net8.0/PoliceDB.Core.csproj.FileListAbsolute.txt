@@ -1,0 +1,12 @@
+E:\PoliceDatabase\PoliceDB.Core\bin\Debug\net8.0\PoliceDB.Core.deps.json
+E:\PoliceDatabase\PoliceDB.Core\bin\Debug\net8.0\PoliceDB.Core.dll
+E:\PoliceDatabase\PoliceDB.Core\bin\Debug\net8.0\PoliceDB.Core.pdb
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.csproj.AssemblyReference.cache
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.AssemblyInfoInputs.cache
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.AssemblyInfo.cs
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.csproj.CoreCompileInputs.cache
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.dll
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\refint\PoliceDB.Core.dll
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\PoliceDB.Core.pdb
+E:\PoliceDatabase\PoliceDB.Core\obj\Debug\net8.0\ref\PoliceDB.Core.dll
